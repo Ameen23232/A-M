@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A&M Nebula | المعلم الأزهري - الصف الثاني الثانوي 2026</title>
+    <title>A&M Nebula | شات عام + AI - منصة الدراسة الجماعية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -23,6 +23,7 @@
             padding: 12px;
         }
 
+        /* شاشة الدخول */
         .login-overlay {
             position: fixed;
             top: 0;
@@ -103,6 +104,7 @@
             font-size: 1rem;
         }
 
+        /* واجهة الشات الرئيسية */
         .chat-container {
             position: relative;
             z-index: 10;
@@ -163,6 +165,7 @@
             50% { opacity: 0.4; }
         }
 
+        /* وضع AI */
         .ai-toggle {
             display: flex;
             align-items: center;
@@ -207,6 +210,7 @@
             left: 21px;
         }
 
+        /* منطقة الرسائل */
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -239,7 +243,6 @@
 
         .ai-message {
             align-self: flex-start;
-            max-width: 85%;
         }
 
         .message-avatar {
@@ -280,9 +283,8 @@
         .message-text {
             font-size: 0.85rem;
             color: #f0f3fa;
-            line-height: 1.5;
+            line-height: 1.4;
             word-wrap: break-word;
-            white-space: pre-wrap;
         }
 
         .message-time {
@@ -292,6 +294,7 @@
             text-align: left;
         }
 
+        /* منطقة الإدخال */
         .input-area {
             padding: 12px 16px 16px;
             background: rgba(0, 0, 0, 0.4);
@@ -317,7 +320,6 @@
             min-height: 40px;
             max-height: 80px;
             padding: 8px 4px;
-            outline: none;
         }
 
         .send-btn {
@@ -336,30 +338,6 @@
             padding: 4px 12px;
         }
 
-        .suggestions {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 8px 12px;
-            border-top: 1px solid rgba(0, 255, 255, 0.1);
-        }
-
-        .suggestion-chip {
-            background: rgba(0, 200, 255, 0.15);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 0.7rem;
-            color: #aaf0ff;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: 0.2s;
-        }
-
-        .suggestion-chip:hover {
-            background: rgba(0, 200, 255, 0.3);
-        }
-
         @media (max-width: 600px) {
             .message { max-width: 95%; }
             .message-avatar { width: 35px; height: 35px; }
@@ -369,11 +347,12 @@
 </head>
 <body>
 
+<!-- شاشة الدخول -->
 <div id="loginOverlay" class="login-overlay">
     <div class="login-card">
-        <i class="fas fa-chalkboard-teacher" style="font-size: 2.5rem; color: #0ff;"></i>
+        <i class="fas fa-users" style="font-size: 2.5rem; color: #0ff;"></i>
         <h2 style="color: #0ff; margin: 15px 0 5px;">A&M Nebula</h2>
-        <p style="color: #8ab3ff;">📖 معلم أزهري متخصص | الصف الثاني الثانوي 2026</p>
+        <p style="color: #8ab3ff;">شات عام + ذكاء اصطناعي للدراسة</p>
         
         <div class="avatar-select" id="avatarSelect">
             <div class="avatar-option selected" data-avatar="👩‍🎓">
@@ -396,25 +375,26 @@
         <input type="text" id="usernameInput" class="username-input" placeholder="اسم المستخدم" maxlength="25">
         
         <button id="joinBtn" class="login-btn">
-            <i class="fas fa-sign-in-alt"></i> دخول إلى منصة الدراسة
+            <i class="fas fa-sign-in-alt"></i> دخول إلى الشات العام
         </button>
         
         <div id="loginError" style="color: #ff6b6b; margin-top: 12px; font-size: 0.75rem;"></div>
     </div>
 </div>
 
+<!-- واجهة الشات -->
 <div id="chatApp" class="chat-container" style="display: none;">
     <div class="header">
         <div class="header-top">
             <div class="logo">
-                <h2><i class="fas fa-mosque"></i> المعلم الأزهري | A&M Nebula</h2>
+                <h2><i class="fas fa-comments"></i> الشات العام | A&M Nebula</h2>
             </div>
             <div class="online-count">
                 <div class="online-dot"></div>
-                <span id="onlineCount">0</span> طالب/طالبة
+                <span id="onlineCount">0</span> متصل
             </div>
             <div class="ai-toggle">
-                <span><i class="fas fa-robot"></i> AI تلقائي</span>
+                <span><i class="fas fa-robot"></i> AI</span>
                 <div id="aiToggle" class="toggle-switch"></div>
                 <span id="aiStatus" style="font-size: 0.65rem;">إيقاف</span>
             </div>
@@ -424,20 +404,12 @@
     <div class="chat-messages" id="chatMessages"></div>
     
     <div id="typingIndicator" class="typing-indicator" style="display: none;">
-        <span><i class="fas fa-spinner fa-pulse"></i> فضيلة الشيخ يكتب...</span>
-    </div>
-
-    <div class="suggestions" id="suggestions">
-        <div class="suggestion-chip" data-question="@AI اشرحلي قاعدة الوصايا في الفقه">📖 الوصايا في الفقه</div>
-        <div class="suggestion-chip" data-question="@AI ما هي أنواع التوحيد؟">🕌 أنواع التوحيد</div>
-        <div class="suggestion-chip" data-question="@AI تفسير سورة الفاتحة">📚 تفسير الفاتحة</div>
-        <div class="suggestion-chip" data-question="@AI اشرحلي حديث إنما الأعمال بالنيات">💭 حديث النية</div>
-        <div class="suggestion-chip" data-question="@AI ما هي أركان الإسلام الخمسة؟">🕋 أركان الإسلام</div>
+        <span>شخص يكتب...</span>
     </div>
 
     <div class="input-area">
         <div class="input-wrapper">
-            <textarea id="messageInput" class="message-input" rows="1" placeholder="اسأل فضيلة الشيخ... اكتب @AI أو شغّل الوضع التلقائي"></textarea>
+            <textarea id="messageInput" class="message-input" rows="1" placeholder="اكتب رسالتك... استخدم @AI ليسأل الذكاء الاصطناعي"></textarea>
             <button id="sendBtn" class="send-btn">
                 <i class="fas fa-paper-plane"></i>
             </button>
@@ -446,21 +418,23 @@
 </div>
 
 <script>
-    // ==================== 🔑 ضع مفتاح API الخاص بك هنا 🔑 ====================
-    // اختر أحد الخيارات التالية:
+    // ==================== إعدادات ====================
+    let currentUser = null;
+    let messages = [];
+    let onlineUsers = new Map();
+    let isAIActive = false;
     
-    // الخيار 1: Groq API (مجاني - سجل في https://console.groq.com)
-    // أفضل خيار - سريع جداً ومجاني
-    const API_TYPE = 'groq';  // 'groq', 'openai', 'gemini'
-    const GROQ_API_KEY = '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';  // اكتب مفتاح Groq هنا
+    // 🔥 المفتاح سيتم حقنه بواسطة GitHub Actions
+    // قيمة افتراضية للاختبار المحلي فقط - سيتم استبدالها أثناء النشر
+    let GROQ_API_KEY = "GROQ_API_KEY_PLACEHOLDER";
     
-    // الخيار 2: OpenAI API (مدفوع)
-    const OPENAI_API_KEY = 'sk-YOUR_OPENAI_API_KEY_HERE';  // اكتب مفتاح OpenAI هنا
+    let typingTimeout = null;
     
-    // الخيار 3: Gemini API (مجاني مع حدود - سجل في https://aistudio.google.com)
-    const GEMINI_API_KEY = 'AIzaSyYOUR_GEMINI_API_KEY_HERE';  // اكتب مفتاح Gemini هنا
+    // معرف فريد للجلسة
+    const sessionId = localStorage.getItem('sessionId') || 'session_' + Date.now() + '_' + Math.random();
+    localStorage.setItem('sessionId', sessionId);
     
-    // ==================== البرومبت الاحترافي ====================
+    // ==================== البرومبت المحسن للمعلم الأزهري ====================
     function getSystemPrompt() {
         return `أنت فضيلة الشيخ، معلم أزهري متخصص في تدريس الصف الثاني الثانوي 2026.
 
@@ -484,13 +458,18 @@
 مثال للرد على سؤال خارج المنهج:
 "يا بنتي، ده مش في منهج الصف الثاني الثانوي للأسف 😅، لكن اسأليني في أي حاجة تانية من المنهج وأنا أجاوبك بكل حب 💕"`;
     }
-
-    // ==================== دوال استدعاء APIs المختلفة ====================
     
-    // Groq API (مجاني - سريع جداً - الأفضل)
+    // ==================== استدعاء Groq API ====================
     async function callGroq(question) {
+    if (GROQ_API_KEY === "GROQ_API_KEY_PLACEHOLDER" || GROQ_API_KEY === "") {
+        console.error("API Key is missing");
+        return "⚠️ عذراً، لم يتم تكوين مفتاح API. الرجاء التواصل مع المسؤول.";
+    }
+
+    try {
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
+            mode: 'cors',
             headers: {
                 'Authorization': `Bearer ${GROQ_API_KEY}`,
                 'Content-Type': 'application/json'
@@ -505,88 +484,27 @@
                 max_tokens: 1000
             })
         });
-        
-        const data = await response.json();
-        if (data.error) throw new Error(data.error.message);
-        return data.choices[0].message.content;
-    }
-    
-    // OpenAI API (مدفوع - قوي)
-    async function callOpenAI(question) {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
-                messages: [
-                    { role: 'system', content: getSystemPrompt() },
-                    { role: 'user', content: question }
-                ],
-                temperature: 0.7,
-                max_tokens: 1000
-            })
-        });
-        
-        const data = await response.json();
-        if (data.error) throw new Error(data.error.message);
-        return data.choices[0].message.content;
-    }
-    
-    // Gemini API (مجاني مع حدود)
-    async function callGemini(question) {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{ role: "user", parts: [{ text: getSystemPrompt() + "\n\nالسؤال: " + question }] }],
-                generationConfig: { temperature: 0.7, maxOutputTokens: 1000 }
-            })
-        });
-        
-        const data = await response.json();
-        if (data.error) throw new Error(data.error.message);
-        return data.candidates[0].content.parts[0].text;
-    }
-    
-    // الدالة الرئيسية لاستدعاء AI
-    async function callAI(question) {
-        try {
-            if (API_TYPE === 'groq' && GROQ_API_KEY && !GROQ_API_KEY.includes('YOUR_')) {
-                return await callGroq(question);
-            } else if (API_TYPE === 'openai' && OPENAI_API_KEY && !OPENAI_API_KEY.includes('YOUR_')) {
-                return await callOpenAI(question);
-            } else if (API_TYPE === 'gemini' && GEMINI_API_KEY && !GEMINI_API_KEY.includes('YOUR_')) {
-                return await callGemini(question);
-            } else {
-                // رسالة تطلب من المستخدم وضع مفتاح API
-                return "⚠️ يا بنتي، فضيلة الشيخ محتاج مفتاح API عشان يشتغل. \n\nروحي على https://console.groq.com وسجلي دخولك بجوجل، خدي مفتاح مجاني وحطيه في الكود مكان gsk_YOUR_GROQ_API_KEY_HERE 😊\n\nأو استخدمي Puter.js المجاني لو حابة تشتغل علطول.";
-            }
-        } catch (error) {
-            console.error('API Error:', error);
-            return "عذراً يا بنتي، في مشكلة في الاتصال حالياً. تأكدي من مفتاح API أو حاولي تاني بعد شوية 😅 فضيلة الشيخ معاكي دايماً 💕";
+
+        if (!response.ok) {
+            throw new Error('API Error');
         }
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+
+    } catch (error) {
+        console.error(error);
+        return "⚠️ حصل خطأ في الاتصال بالذكاء الاصطناعي، حاول تاني 😊";
     }
-    
-    // ==================== إدارة البيانات ====================
-    let currentUser = null;
-    let messages = [];
-    let onlineUsers = new Map();
-    let isAIActive = false;
-    
-    const sessionId = localStorage.getItem('sessionId') || 'session_' + Date.now() + '_' + Math.random();
-    localStorage.setItem('sessionId', sessionId);
-    
+}
     // ==================== إدارة الرسائل ====================
     function saveMessages() {
         const toSave = messages.slice(-200);
-        localStorage.setItem('azhar_chat_messages', JSON.stringify(toSave));
+        localStorage.setItem('public_chat_messages', JSON.stringify(toSave));
     }
     
     function loadMessages() {
-        const stored = localStorage.getItem('azhar_chat_messages');
+        const stored = localStorage.getItem('public_chat_messages');
         if (stored) {
             try {
                 messages = JSON.parse(stored);
@@ -628,7 +546,7 @@
         const nameSpan = document.createElement('div');
         nameSpan.className = 'message-name';
         if (msg.type === 'ai') {
-            nameSpan.innerHTML = '<i class="fas fa-robot"></i> فضيلة الشيخ';
+            nameSpan.innerHTML = '<i class="fas fa-robot"></i> الذكاء الاصطناعي';
         } else {
             nameSpan.textContent = msg.username;
         }
@@ -681,15 +599,15 @@
             let question = text.replace(/@AI/gi, '').replace(/@ai/gi, '').replace(/يا شيخ/gi, '').trim();
             if (!question) question = text;
             
-            const aiResponse = await callAI(question);
+            const aiResponse = await callGroq(question);
             
             showTypingIndicator(false);
             
-            addMessage('ai', 'AI', aiResponse, 'ai_system', 'fas fa-mosque', '#2ecc71', true);
+            addMessage('ai', 'AI', aiResponse, 'ai_system', 'fas fa-robot', '#ff6b6b', true);
         }
     }
     
-    // ==================== إدارة المستخدمين ====================
+    // ==================== إدارة المستخدمين المتصلين ====================
     function updateOnlineUsers() {
         onlineUsers.set(currentUser.id, {
             name: currentUser.name,
@@ -712,11 +630,11 @@
         const usersArray = Array.from(onlineUsers.entries()).map(([id, data]) => ({
             id, name: data.name, avatarIcon: data.avatarIcon, lastSeen: data.lastSeen
         }));
-        localStorage.setItem('online_users_azhar', JSON.stringify(usersArray));
+        localStorage.setItem('online_users', JSON.stringify(usersArray));
     }
     
     function loadOnlineUsers() {
-        const stored = localStorage.getItem('online_users_azhar');
+        const stored = localStorage.getItem('online_users');
         if (stored) {
             try {
                 const usersArray = JSON.parse(stored);
@@ -731,22 +649,24 @@
         }
     }
     
+    // ==================== مؤشر الكتابة ====================
     function showTypingIndicator(show) {
         const indicator = document.getElementById('typingIndicator');
         if (show) {
             indicator.style.display = 'block';
-            indicator.innerHTML = '<span><i class="fas fa-spinner fa-pulse"></i> فضيلة الشيخ يكتب...</span>';
+            indicator.innerHTML = '<span><i class="fas fa-spinner fa-pulse"></i> AI يكتب...</span>';
         } else {
             indicator.style.display = 'none';
         }
     }
     
+    // ==================== وظائف مساعدة ====================
     function scrollToBottom() {
         const container = document.getElementById('chatMessages');
         if (container) container.scrollTop = container.scrollHeight;
     }
     
-    // ==================== الدخول ====================
+    // ==================== الدخول إلى الشات ====================
     async function joinChat() {
         const username = document.getElementById('usernameInput').value.trim();
         if (!username) {
@@ -756,7 +676,7 @@
         
         const selectedAvatar = document.querySelector('.avatar-option.selected');
         let avatarIcon = 'fas fa-user-graduate';
-        let avatarColor = '#ff6b6b';
+        let avatarColor = '#00d4ff';
         
         if (selectedAvatar) {
             const avatarData = selectedAvatar.getAttribute('data-avatar');
@@ -783,8 +703,8 @@
         loadOnlineUsers();
         
         setTimeout(async () => {
-            const welcomeMessage = await callAI("أكتب رسالة ترحيب لطالبة جديدة في منصة الدراسة اسمها " + username + "، قولها إنها في قناة فضيلة الشيخ، وشجعها على المذاكرة. اجعل الرسالة قصيرة وحلوة ومليانة إيموجيز");
-            addMessage('ai', 'AI', welcomeMessage, 'ai_system', 'fas fa-mosque', '#2ecc71', true);
+            const welcomeMessage = await callGroq(`أكتب رسالة ترحيب لطالبة جديدة في منصة الدراسة اسمها ${username}، قولها إنها في قناة فضيلة الشيخ، وشجعها على المذاكرة. اجعل الرسالة قصيرة وحلوة ومليانة إيموجيز`);
+            addMessage('ai', 'AI', welcomeMessage, 'ai_system', 'fas fa-robot', '#ff6b6b', true);
         }, 500);
         
         updateOnlineUsers();
@@ -798,6 +718,7 @@
         loadOnlineUsers();
     }
     
+    // ==================== تبديل وضع AI ====================
     async function toggleAI() {
         isAIActive = !isAIActive;
         const toggle = document.getElementById('aiToggle');
@@ -806,14 +727,14 @@
             toggle.classList.add('active');
             status.textContent = 'شغال';
             status.style.color = '#0ff';
-            const message = await callAI("اكتب رسالة قصيرة تقول فيها إن تم تفعيل الوضع التلقائي، وكل أسئلة الطالبة هتتوجه لفضيلة الشيخ مباشرة، قولها كمان إنها تقدر تستخدم @AI عشان تسأل حاجة معينة");
-            addMessage('ai', 'AI', message, 'ai_system', 'fas fa-mosque', '#2ecc71', true);
+            const message = await callGroq('اكتب رسالة قصيرة تقول فيها إن تم تفعيل الوضع التلقائي، وكل أسئلة الطالبة هتتوجه لفضيلة الشيخ مباشرة، قولها كمان إنها تقدر تستخدم @AI عشان تسأل حاجة معينة');
+            addMessage('ai', 'AI', message, 'ai_system', 'fas fa-robot', '#ff6b6b', true);
         } else {
             toggle.classList.remove('active');
             status.textContent = 'إيقاف';
             status.style.color = '#aaa';
-            const message = await callAI("اكتب رسالة قصيرة تقول فيها إن تم إيقاف الوضع التلقائي، وإن الطالبة تقدر تستخدم @AI قبل سؤالها عشان تطلب المساعدة من فضيلة الشيخ");
-            addMessage('ai', 'AI', message, 'ai_system', 'fas fa-mosque', '#2ecc71', true);
+            const message = await callGroq('اكتب رسالة قصيرة تقول فيها إن تم إيقاف الوضع التلقائي، وإن الطالبة تقدر تستخدم @AI قبل سؤالها عشان تطلب المساعدة من فضيلة الشيخ');
+            addMessage('ai', 'AI', message, 'ai_system', 'fas fa-robot', '#ff6b6b', true);
         }
     }
     
@@ -847,17 +768,6 @@
     document.getElementById('messageInput')?.addEventListener('input', function() {
         this.style.height = 'auto';
         this.style.height = Math.min(this.scrollHeight, 80) + 'px';
-    });
-    
-    document.querySelectorAll('.suggestion-chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-            const question = chip.getAttribute('data-question');
-            if (question) {
-                document.getElementById('messageInput').value = question;
-                sendUserMessage(question);
-                document.getElementById('messageInput').value = '';
-            }
-        });
     });
 </script>
 </body>
